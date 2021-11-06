@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import SignIn from '../Components/AuthComponents/SignIn/SignIn';
 import SignUp from '../Components/AuthComponents/SignUp/SignUp';
 import ErrorNotFound from '../Components/ErrorNotFound/ErrorNotFound';
-import ExpensesPage from '../Components/Therapist/ExpensesPage';
+import ExpensesPage from '../Components/Expenses/ExpensesPage';
 import { INDEX, SIGNIN, SIGNUP } from './routesConstants';
 
 const Routers = () => {

@@ -1,6 +1,5 @@
 /*
  * Filename: CookiesHelper.js
- * Path: c:\zCodes\therapiest project\nick-fury
  * Created Date: Sunday, June 13th 2021, 9:22:01 am
  * Author: Numan Ahmed
  * Description: Set Cookie value & get Cookie value

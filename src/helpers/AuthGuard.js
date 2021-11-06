@@ -1,7 +1,6 @@
 /*
  * Filename: AuthGuard.js
- * Path: c:\zCodes\therapiest project\nick-fury
- * Created Date: Sunday, June 13th 2021, 9:01:25 am
+ * Created Date: Saturday, Nov 6th 2021, 8:01:25 am
  * Author: Numan Ahmed
  * Description: Get Authenticated User
  * Developed with ❤️

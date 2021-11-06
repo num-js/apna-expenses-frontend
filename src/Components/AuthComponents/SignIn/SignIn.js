@@ -62,7 +62,7 @@ const SignIn = () => {
 
             if (response) {
                 toast.success(response.data.message);
-                console.log('res: ', response);
+                setCookie('apna-expenses-token', response.data.token);
                 history.push(INDEX);
             }
             setSignInLoader(false);

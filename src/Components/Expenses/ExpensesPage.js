@@ -1,37 +1,46 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, Grid, Typography, Container } from '@material-ui/core';
 import BaseLayout from '../Layouts/BaseLayout';
-import useStyles from './therapistStyles';
+import useStyles from './expensesPageStyles';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchAllExpensesData } from '../../store/reducers/expensesReducer';
 
-const therapists = [1, 2, 3, 4, 5, 6, 7, 8, 9];
 
 const ExpensesPage = () => {
+    const {
+        allExpensesData
+    } = useSelector(state => state.expensesReducer);
+
     const classes = useStyles();
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        !allExpensesData && dispatch(fetchAllExpensesData());
+    }, []);
 
     return (
         <>
             <BaseLayout>
                 <Container style={{ minHeight: '90vh' }} className={classes.cardGrid} maxWidth="md">
-                    {/* End hero unit */}
                     <Grid container spacing={4}>
-                        {therapists.map((therapist) => (
-                            <Grid item key={therapist} xs={12} sm={6} md={4}>
+                        {allExpensesData && allExpensesData.map((expenses) => (
+                            <Grid item key={expenses} xs={12} sm={6} md={4}>
                                 <Card className={classes.card}>
                                     <Grid container spacing={0}>
                                         <Grid item xs={8}>
                                             <div className={classes.peopleCard}>
                                                 <Typography variant="subtitle2">
-                                                    Mobile - Poco M2 Pro
+                                                    {expenses.name}
                                                 </Typography>
                                                 <span className="text-xs text-gray-400">
-                                                    31-10-21
+                                                    {expenses.date}
                                                 </span>
                                             </div>
                                         </Grid>
                                         <Grid item xs={4}>
                                             <div align="right">
                                                 <div className={classes.peopleCard}>
-                                                    12,000
+                                                    {expenses.price}
                                                 </div>
                                             </div>
                                         </Grid>

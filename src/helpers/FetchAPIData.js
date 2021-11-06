@@ -1,6 +1,6 @@
 /*
  * Filename: FetchAPIData.js
- * Created Date: Sunday, June 13th 2021, 10:48:14 am
+ * Created Date: Sunday, Nov 6th 2021, 8:48:14 am
  * Author: Numan Ahmed
  * Description: Responsible for All HTTP API Requests with Access Token
  * Developed with ❤️
@@ -21,7 +21,7 @@ import { getCookie } from "./CookiesHelper";
  */
 const FetchAPIData = async (method = 'post', endpoint, data = null) => {
     const BASE_URL = process.env.REACT_APP_API_BASE_URL + '/api';
-    const accessToken = getCookie('db_access_token');
+    const accessToken = getCookie('apna-expenses-token');
     let config = {};
 
     if ((method == 'post' || method == 'put') && data) {

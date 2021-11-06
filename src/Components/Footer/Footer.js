@@ -44,7 +44,7 @@ const Footer = () => {
 
                 <BottomNavigationAction
                     icon={
-                        <NavLink to="/therapist">
+                        <NavLink to="/">
                             <img src="./images/svgs/footer-nav/calender.svg" alt="calender" />
                         </NavLink>
                     }
@@ -52,7 +52,7 @@ const Footer = () => {
 
                 <BottomNavigationAction
                     icon={
-                        <NavLink to="/chat">
+                        <NavLink to="/">
                             <img src="./images/svgs/footer-nav/chat.svg" alt="chat" />
                         </NavLink>
                     }
