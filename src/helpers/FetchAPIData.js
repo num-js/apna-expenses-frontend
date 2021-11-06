@@ -1,6 +1,5 @@
 /*
  * Filename: FetchAPIData.js
- * Path: c:\zCodes\therapiest project\nick-fury
  * Created Date: Sunday, June 13th 2021, 10:48:14 am
  * Author: Numan Ahmed
  * Description: Responsible for All HTTP API Requests with Access Token
@@ -21,7 +20,7 @@ import { getCookie } from "./CookiesHelper";
  * @returns - {Object} - API response
  */
 const FetchAPIData = async (method = 'post', endpoint, data = null) => {
-    const BASE_URL = process.env.REACT_APP_BASE_URL + '/nick-fury/api';
+    const BASE_URL = process.env.REACT_APP_API_BASE_URL + '/api';
     const accessToken = getCookie('db_access_token');
     let config = {};
 
@@ -61,12 +60,8 @@ const FetchAPIData = async (method = 'post', endpoint, data = null) => {
 
     let response = await axios(config)
         .catch((error) => {
-            if (error.response) {
-                if (error.response.data.msg) {
-                    toast.error(error.response.data.msg);
-                    // console.error('Error occur in Fetch api: ', error.response.data.msg);
-                }
-            }
+            toast.error(error.response.data.error);
+            // return error;
         });
 
     return response;

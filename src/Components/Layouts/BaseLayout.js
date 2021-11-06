@@ -5,7 +5,6 @@ import { getCookie } from '../../helpers/CookiesHelper';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import { useDispatch } from 'react-redux';
-import { getJournalData } from '../../redux/actions/journalActions';
 
 const BaseLayout = ({ children }) => {
     const history = useHistory();

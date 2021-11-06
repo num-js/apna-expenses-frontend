@@ -9,21 +9,19 @@
  */
 
 
-import { Auth } from "../firebase";
-
 /**
  * Get Authenticated User
  * @returns Object || Null - if User Authenticated, returns User object, else null
  */
 const AuthGuard = async () => {
-    try {
-        Auth.onAuthStateChanged(user => {
-            console.log('user: ', user);
-            return user;
-        });
-    } catch (error) {
-        return null;
-    }
+    // try {
+    //     Auth.onAuthStateChanged(user => {
+    //         console.log('user: ', user);
+    //         return user;
+    //     });
+    // } catch (error) {
+    //     return null;
+    // }
 }
 
 export default AuthGuard;

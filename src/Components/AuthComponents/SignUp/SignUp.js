@@ -4,15 +4,14 @@ import { Link, useHistory } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Loader from '../../Layouts/Loader';
 import BigLoader from '../../Layouts/BigLoader';
-import GoogleSignIn from '../GoogleSignIn/GoogleSignIn';
 import useStyles from '../authStyles';
-import { getCookie, setCookie } from '../../../helpers/CookiesHelper';
-import axios from 'axios';
-import { Auth } from '../../../firebase-configs/firebase';
+import { SIGNIN } from '../../../routes/routesConstants';
+import FetchAPIData from '../../../helpers/FetchAPIData';
 
 const SignUp = () => {
     const classes = useStyles();
     const history = useHistory();
+    const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [signUpLoader, setSignUpLoader] = useState(false);
@@ -22,30 +21,12 @@ const SignUp = () => {
      * Check User's Authorization & Redirection
      */
     useEffect(() => {
-        if (getCookie('db_access_token')) {
-            history.push('/');
-        } else {
-            setComponentLoader(false);
-        }
+        // if (getCookie('db_access_token')) {
+        //     history.push('/');
+        // } else {
+        // setComponentLoader(false);
+        // }
     }, []);
-
-    const userLoginHandler = async (firebaseAccessToken) => {
-        try {
-            const firebaseIdToken = {
-                firebase_id_token: firebaseAccessToken
-            }
-            const signInData = await axios.post('https://b1.wealth42.com/nick-fury/api/firebase-view', firebaseIdToken);
-            if (signInData.data.status && signInData.data.status == 'ERROR') {
-                throw signInData.data.message.substring(0, 80) + '...';
-            }
-
-            setCookie('db_access_token', signInData.data.data.jwt_token, 15);
-            toast('SignIn Successful');
-            history.push('/');
-        } catch (error) {
-            toast.error('Failed to Signup ,' + error)
-        }
-    }
 
     /**
      * Handler for Signup
@@ -53,27 +34,29 @@ const SignUp = () => {
      */
     const signUpHandler = async (event) => {
         event.preventDefault();
-        if (!email || !password) {
-            toast.error('Enter Email and Password');
+        if (!name || !email || !password) {
+            toast.error('Enter Name, Email and Password');
             return;
         }
 
         try {
             setSignUpLoader(true);
-            const signupData = await Auth.createUserWithEmailAndPassword(email, password);
-            if (signupData) {
-                const firebaseAccessToken = await Auth.currentUser.getIdToken(true).then((token) => token);
-                if (firebaseAccessToken) {
-                    if (signupData.additionalUserInfo.isNewUser) {
-                        setCookie('firebase_access_Token', firebaseAccessToken, 10);
-                        toast.warning('SignUp in progress.. Redirecting. ');
-                        history.push('/user-details');
-                    } else {
-                        userLoginHandler(firebaseAccessToken);
-                    }
-                }
+
+            const userSignupData = {
+                name,
+                email,
+                password
             }
+
+            const response = await FetchAPIData('post', '/signup', userSignupData);
+
+            if (response) {
+                toast.success(response.data.message);
+                history.push(SIGNIN);
+            }
+            setSignUpLoader(false);
         } catch (error) {
+            setSignUpLoader(false);
             toast.error('Failed to Signup ,' + error)
             setSignUpLoader(false);
         }
@@ -82,21 +65,22 @@ const SignUp = () => {
     return (
         <>
             {
-                componentLoader ? (
+                !componentLoader ? (
                     <BigLoader />
                 ) : (
                     <Container component="main" maxWidth="xs">
                         <CssBaseline />
                         <div className={classes.paper}>
-                            <img src="./images/svgs/character_lappy_support.svg"  alt="character-svg" style={{ maxWidth: '345' }} />
+                                <img src="./images/svgs/character_lappy_support.svg" alt="character-svg" style={{ maxWidth: '75%' }} />
                             <Typography component="h1" variant="h5">
-                                Welcome to muzo
-                            </Typography>
-                            <Typography variant="subtitle1">
-                                continue with
+                                    Welcome! to <span className="text-pink-600"> Apna Expenses </span>
                             </Typography>
                             <form onSubmit={signUpHandler} className={classes.form} noValidate>
-                                <TextField className={classes.formField} variant="filled" margin="normal" required fullWidth type="email" label="Email Address" autoComplete="email" autoFocus
+                                    <TextField className={classes.formField} variant="filled" margin="normal" required fullWidth type="text" label="Name" autoComplete="name" autoFocus
+                                        value={name}
+                                        onChange={(event) => setName(event.target.value)}
+                                    />
+                                    <TextField className={classes.formField} variant="filled" margin="normal" required fullWidth type="email" label="Email Address" autoComplete="email"
                                     value={email}
                                     onChange={(event) => setEmail(event.target.value)}
                                 />
@@ -111,13 +95,12 @@ const SignUp = () => {
                                 <Grid container alignItems="center" justify="center">
                                     <Grid item>
                                         Have an account?
-                                        <Link to="/signin">
+                                            <Link to={SIGNIN}>
                                             <spna style={{ marginLeft: '10px', color: 'white' }}>Sign In</spna>
                                         </Link>
                                     </Grid>
                                 </Grid>
-                            </form>
-                            <GoogleSignIn />
+                                </form>
                         </div>
                     </Container>
                 )

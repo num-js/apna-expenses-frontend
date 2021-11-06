@@ -1,28 +1,33 @@
 import React from 'react';
 import { BrowserRouter, Route, Switch } from 'react-router-dom';
 import SignIn from '../Components/AuthComponents/SignIn/SignIn';
-// import SignUp from '../Components/AuthComponents/SignUp/SignUp';
+import SignUp from '../Components/AuthComponents/SignUp/SignUp';
 import ErrorNotFound from '../Components/ErrorNotFound/ErrorNotFound';
+import ExpensesPage from '../Components/Therapist/ExpensesPage';
+import { INDEX, SIGNIN, SIGNUP } from './routesConstants';
 
-const RouterComponent = () => {
+const Routers = () => {
     return (
         <BrowserRouter >
             <Switch>
-                <Route path='/' exact>
-                    <h1>Hey Numan</h1>
-                </Route>
-                {/* <Route path='/signup'>
+                <Route path={SIGNUP}>
                     <SignUp />
-                </Route> */}
-                <Route path='/signin'>
+                </Route>
+
+                <Route path={SIGNIN}>
                     <SignIn />
                 </Route>
+
+                <Route exact path={INDEX} >
+                    <ExpensesPage />
+                </Route>
+
                 <Route>
                     <ErrorNotFound />
                 </Route>
             </Switch>
-        </BrowserRouter>
+        </BrowserRouter >
     );
 }
 
-export default RouterComponent;
+export default Routers;

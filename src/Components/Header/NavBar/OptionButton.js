@@ -3,7 +3,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
-import { Auth } from '../../../firebase';
 import { useHistory } from 'react-router-dom';
 import { setCookie } from '../../../helpers/CookiesHelper';
 
@@ -23,13 +22,13 @@ const OptionButton = () => {
     };
 
     const logoutHandler = async () => {
-        handleClose();
-        await Auth.signOut();
-        setCookie('db_access_token', null, 1);
-        history.push('/signin');
+        // handleClose();
+        // await Auth.signOut();
+        // setCookie('db_access_token', null, 1);
+        // history.push('/signin');
     }
 
-    const goToAddNote = () => {
+    const addExpenseHandler = () => {
         handleClose();
         history.push('/add-note');
     }
@@ -58,8 +57,8 @@ const OptionButton = () => {
                     },
                 }}
             >
-                <MenuItem onClick={goToAddNote}>
-                    + Add Note
+                <MenuItem onClick={addExpenseHandler}>
+                    + Add Expense
                 </MenuItem>
                 <MenuItem onClick={logoutHandler}>
                     Logout
