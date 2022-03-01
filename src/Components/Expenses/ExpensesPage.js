@@ -1,22 +1,26 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, Grid, Typography, Container } from '@material-ui/core';
 import BaseLayout from '../Layouts/BaseLayout';
 import useStyles from './expensesPageStyles';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllExpensesData } from '../../store/reducers/expensesReducer';
+import AddExpensesModal from '../Shared/AddExpensesModalModal';
+import AddIcon from "@mui/icons-material/Add";
+import FloatingActionButton from '../Shared/FloatingActionButton';
 
 
 const ExpensesPage = () => {
-    const {
-        allExpensesData
-    } = useSelector(state => state.expensesReducer);
+    const { allExpensesData } = useSelector(state => state.expensesReducer);
 
     const classes = useStyles();
     const dispatch = useDispatch();
 
+    const [toggleAddExpenseModal, setToggleAddExpenseModal] = useState(false);
+
     useEffect(() => {
         !allExpensesData && dispatch(fetchAllExpensesData());
     }, []);
+
 
     return (
         <>
@@ -45,11 +49,24 @@ const ExpensesPage = () => {
                                             </div>
                                         </Grid>
                                     </Grid>
-
                                 </Card>
                             </Grid>
                         ))}
                     </Grid>
+
+                    <div onClick={() => setToggleAddExpenseModal(true)}>
+                        <FloatingActionButton>
+                            <AddIcon />
+                        </FloatingActionButton>
+                    </div>
+
+                    {/* Add Expenses Modal */}
+                    <AddExpensesModal
+                        toggleAddExpenseModal={toggleAddExpenseModal}
+                        setToggleAddExpenseModal={setToggleAddExpenseModal}
+                    />
+
+
                 </Container>
             </BaseLayout>
         </>
