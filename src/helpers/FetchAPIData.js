@@ -17,10 +17,11 @@ import { getCookie } from "./CookiesHelper";
  * @param {String} method - HTTP requests - GET || POST || PUT || DELETE
  * @param {String} endpoint 
  * @param {Object} data 
+ * @param {String} endpointPrefix - EndPoint Prefix. default - '/api'
  * @returns - {Object} - API response
  */
-const FetchAPIData = async (method = 'post', endpoint, data = null) => {
-    const BASE_URL = process.env.REACT_APP_API_BASE_URL + '/api';
+const FetchAPIData = async (method = 'post', endpoint, data = null, endpointPrefix = "/api") => {
+    const BASE_URL = process.env.REACT_APP_API_BASE_URL + endpointPrefix;
     const accessToken = getCookie('apna-expenses-token');
     let config = {};
 

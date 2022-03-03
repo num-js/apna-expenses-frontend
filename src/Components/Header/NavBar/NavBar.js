@@ -32,7 +32,7 @@ const NavBar = () => {
         <div className={classes.root}>
             <AppBar position="static" className={classes.header}>
                 <Toolbar>
-                    <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+                    <Avatar alt="Numan Ahmed" src="/static/images/avatar/1.jpg" />
                     <Typography variant="h6" className={classes.title}></Typography>
                     <Typography variant="h6" className={classes.title}>
                         Numan

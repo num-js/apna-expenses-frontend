@@ -1,10 +1,9 @@
 import React, { useState } from 'react';
 
-import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, FormControlLabel, FormGroup, Modal, Slide, TextField } from '@material-ui/core';
+import { Button, Checkbox, Dialog, DialogActions, DialogContent, DialogContentText, DialogTitle, Drawer, FormControlLabel, FormGroup, Modal, Slide, TextField } from '@material-ui/core';
 
 import { makeStyles } from '@material-ui/core/styles';
-// import Button from '@material-ui/core/Button';
-// import Modal from '@material-ui/core/Modal';
+
 
 
 function getModalStyle() {
@@ -41,13 +40,14 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 const AddExpensesModal = ({ toggleAddExpenseModal, setToggleAddExpenseModal }) => {
 
     const classes = useStyles();
+    const [toggleBottomSheet, setToggleBottomSheet] = useState(false);
 
 
     return (
         <>
             <div>
 
-                <Modal
+                {/* <Modal
                     aria-labelledby="simple-modal-title"
                     aria-describedby="simple-modal-description"
                     open={toggleAddExpenseModal}
@@ -57,7 +57,7 @@ const AddExpensesModal = ({ toggleAddExpenseModal, setToggleAddExpenseModal }) =
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6">
                         NNNNNNNNNNNN
                     </div>
-                </Modal>
+                </Modal> */}
 
 
                 {/* <Dialog
@@ -84,6 +84,8 @@ const AddExpensesModal = ({ toggleAddExpenseModal, setToggleAddExpenseModal }) =
                     </form>
 
                 </Dialog> */}
+
+                
             </div>
         </>
     )
