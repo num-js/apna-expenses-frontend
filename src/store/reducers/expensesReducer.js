@@ -15,11 +15,26 @@ export const fetchAllExpensesData = createAsyncThunk(
     }
 )
 
+export const deleteExpense = createAsyncThunk(
+    'deleteExpense',
+    async (expenseId) => {
+        try {
+            const response = await FetchAPIData('delete', `/delete-expense/${expenseId}`);
+            console.log('response: ', response);
+            return expenseId;
+        } catch (error) {
+            console.log('Error: ', error);
+        }
+    }
+)
+
 const expensesSlice = createSlice({
     name: "expensesSlice",
     initialState,
     reducers: {
-
+        addExpense: (state, { payload }) => {
+            state.allExpensesData = [payload, ...state.allExpensesData]
+        },
     },
     extraReducers: {
         [fetchAllExpensesData.pending]: (state) => {
@@ -33,9 +48,16 @@ const expensesSlice = createSlice({
             state.allExpensesDataLoader = false;
             console.log('Error Occur in Fetching Data');
         },
+        [fetchAllExpensesData.fulfilled]: (state, { payload }) => {
+            state.allExpensesDataLoader = false;
+            state.allExpensesData = payload;
+        },
+        [deleteExpense.fulfilled]: (state, { payload }) => {
+            state.allExpensesData = state.allExpensesData.filter(expense => expense._id !== payload);
+        },
     }
 });
 
 
-// export const {  } = expensesSlice.actions;
+export const { addExpense } = expensesSlice.actions;
 export default expensesSlice.reducer;
