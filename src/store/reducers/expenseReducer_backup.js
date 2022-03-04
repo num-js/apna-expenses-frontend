@@ -4,9 +4,6 @@ import FetchAPIData from '../../helpers/FetchAPIData';
 const initialState = {
     allExpensesData: null,
     allExpensesDataLoader: false,
-    totalAmount: 0,
-    allMoneyData: null,
-    allMoneyDataLoader: false,
 }
 
 export const fetchAllExpensesData = createAsyncThunk(
@@ -31,24 +28,12 @@ export const deleteExpense = createAsyncThunk(
     }
 )
 
-export const fetchAllMoneyData = createAsyncThunk(
-    'fetchAllMoneyData',
-    async () => {
-        const response = await FetchAPIData('get', '/get-expenses');
-        console.log('response: ', response);
-        return response.data.data;
-    }
-)
-
 const expensesSlice = createSlice({
     name: "expensesSlice",
     initialState,
     reducers: {
         addExpense: (state, { payload }) => {
             state.allExpensesData = [payload, ...state.allExpensesData]
-        },
-        addMoney: (state, { payload }) => {
-            state.allMoneyData = [payload, ...state.allMoneyData]
         },
     },
     extraReducers: {
@@ -61,25 +46,18 @@ const expensesSlice = createSlice({
         },
         [fetchAllExpensesData.rejected]: (state) => {
             state.allExpensesDataLoader = false;
-            console.log('Error Occur in Fetching Expense Data');
+            console.log('Error Occur in Fetching Data');
+        },
+        [fetchAllExpensesData.fulfilled]: (state, { payload }) => {
+            state.allExpensesDataLoader = false;
+            state.allExpensesData = payload;
         },
         [deleteExpense.fulfilled]: (state, { payload }) => {
             state.allExpensesData = state.allExpensesData.filter(expense => expense._id !== payload);
-        },
-        [fetchAllMoneyData.pending]: (state) => {
-            state.allMoneyDataLoader = true;
-        },
-        [fetchAllMoneyData.fulfilled]: (state, { payload }) => {
-            state.allMoneyDataLoader = false;
-            state.allMoneyData = payload;
-        },
-        [fetchAllMoneyData.rejected]: (state) => {
-            state.allMoneyDataLoader = false;
-            console.log('Error Occur in Fetching Account Data');
         },
     }
 });
 
 
-export const { addExpense, addMoney } = expensesSlice.actions;
+export const { addExpense } = expensesSlice.actions;
 export default expensesSlice.reducer;
