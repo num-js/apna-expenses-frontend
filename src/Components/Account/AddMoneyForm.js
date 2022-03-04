@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import FetchAPIData from '../../helpers/FetchAPIData';
-import { addExpense } from '../../store/reducers/expensesReducer';
+import { addTransaction } from '../../store/reducers/expensesReducer';
 
 const AddMoneyForm = ({ setToggleBottomSheet }) => {
     const dispatch = useDispatch();
@@ -19,18 +19,18 @@ const AddMoneyForm = ({ setToggleBottomSheet }) => {
         }
 
         let newExpenseData = {
-            name: title,
-            price: amount,
-            message
+            title,
+            amount,
+            description: message
         }
 
         date && newExpenseData.push(date);
 
         try {
-            const response = await FetchAPIData('post', '/add-expense', newExpenseData);
+            const response = await FetchAPIData('post', '/add-transaction', newExpenseData);
             console.log('response: ', response);
             setToggleBottomSheet(false);
-            dispatch(addExpense(response.data.data));
+            dispatch(addTransaction(response.data.data));
         } catch (error) {
             console.log('Error in Adding Expense: ', error);
         }
