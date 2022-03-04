@@ -66,7 +66,7 @@ const UserDetails = () => {
                 throw signUpWithDb.data.message.substring(0, 80) + '...';
             }
 
-            setCookie('db_access_token', signUpWithDb.data.data.jwt_token, 15);
+            setCookie('apna-expenses-token', signUpWithDb.data.data.jwt_token, 15);
             setCookie('firebase_access_Token', null, 1);
             toast('Signin Successful');
             history.push('/');

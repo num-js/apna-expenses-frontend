@@ -20,6 +20,7 @@ const BaseLayout = ({ children }) => {
             setComponentLoader(false);
         } else {
             history.push(SIGNIN);
+            return;
         }
     }, []);
 

@@ -5,6 +5,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import { useHistory } from 'react-router-dom';
 import { setCookie } from '../../../helpers/CookiesHelper';
+import { SIGNIN } from '../../../routes/routesConstants';
 
 const ITEM_HEIGHT = 48;
 const OptionButton = () => {
@@ -22,15 +23,14 @@ const OptionButton = () => {
     };
 
     const logoutHandler = async () => {
-        // handleClose();
-        // await Auth.signOut();
-        // setCookie('db_access_token', null, 1);
-        // history.push('/signin');
+        handleClose();
+        setCookie('apna-expenses-token', null, 1);
+        history.push(SIGNIN);
     }
 
     const addExpenseHandler = () => {
         handleClose();
-        history.push('/add-note');
+        // history.push('/add-note');
     }
 
     return (

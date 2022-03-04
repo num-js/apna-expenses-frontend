@@ -35,7 +35,7 @@ const NavBar = () => {
                     <Avatar alt="Numan Ahmed" src="/static/images/avatar/1.jpg" />
                     <Typography variant="h6" className={classes.title}></Typography>
                     <Typography variant="h6" className={classes.title}>
-                        Numan
+                        
                     </Typography>
                     <OptionButton />
                 </Toolbar>
