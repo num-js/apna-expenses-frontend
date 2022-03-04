@@ -22,11 +22,11 @@ const SignIn = () => {
      * Check User's Authorization & Redirection
      */
     useEffect(() => {
-        // if (getCookie('db_access_token')) {
-        //     history.push('/');
-        // } else {
-        //     setComponentLoader(false);
-        // }
+        if (getCookie('apna-expenses-token')) {
+            history.push(INDEX);
+        } else {
+            setComponentLoader(false);
+        }
     }, []);
 
     const userLoginHandler = async () => {
@@ -75,16 +75,16 @@ const SignIn = () => {
     return (
         <>
             {
-                !componentLoader ? (
+                componentLoader ? (
                     <BigLoader />
                 ) : (
                     <Container component="main" maxWidth="xs">
                         <CssBaseline />
                         <div className={classes.paper}>
-                                <img src="./images/svgs/character_lappy.svg" alt="character-svg" style={{ maxWidth: '75%' }} />
+                            <img src="./images/svgs/character_lappy.svg" alt="character-svg" style={{ maxWidth: '75%' }} />
                             <Typography component="h1" variant="h5">
-                                    Welcome! to <span className="text-pink-600"> Apna Expenses </span>
-                                </Typography>
+                                Welcome! to <span className="text-pink-600"> Apna Expenses </span>
+                            </Typography>
                             <form className={classes.form} onSubmit={signInHandler}>
                                 <TextField className={classes.formField} variant="filled" margin="normal" type="email" required fullWidth label="Email Address" autoComplete="email" autoFocus
                                     value={email}
@@ -100,12 +100,12 @@ const SignIn = () => {
                                 <Grid container alignItems="center" justify="center">
                                     <Grid item>
                                         Don't have an account?
-                                            <Link to={SIGNUP}>
+                                        <Link to={SIGNUP}>
                                             <spna style={{ marginLeft: '10px', color: 'white' }}>Sign Up</spna>
                                         </Link>
                                     </Grid>
                                 </Grid>
-                                </form>
+                            </form>
                         </div>
                     </Container>
                 )

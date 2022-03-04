@@ -5,8 +5,9 @@ import { toast } from 'react-toastify';
 import Loader from '../../Layouts/Loader';
 import BigLoader from '../../Layouts/BigLoader';
 import useStyles from '../authStyles';
-import { SIGNIN } from '../../../routes/routesConstants';
+import { INDEX, SIGNIN } from '../../../routes/routesConstants';
 import FetchAPIData from '../../../helpers/FetchAPIData';
+import { getCookie } from '../../../helpers/CookiesHelper';
 
 const SignUp = () => {
     const classes = useStyles();
@@ -18,14 +19,14 @@ const SignUp = () => {
     const [componentLoader, setComponentLoader] = useState(true);
 
     /**
-     * Check User's Authorization & Redirection
-     */
+      * Check User's Authorization & Redirection
+    */
     useEffect(() => {
-        // if (getCookie('db_access_token')) {
-        //     history.push('/');
-        // } else {
-        // setComponentLoader(false);
-        // }
+        if (getCookie('apna-expenses-token')) {
+            history.push(INDEX);
+        } else {
+            setComponentLoader(false);
+        }
     }, []);
 
     /**
@@ -71,16 +72,16 @@ const SignUp = () => {
                     <Container component="main" maxWidth="xs">
                         <CssBaseline />
                         <div className={classes.paper}>
-                                <img src="./images/svgs/character_lappy_support.svg" alt="character-svg" style={{ maxWidth: '75%' }} />
+                            <img src="./images/svgs/character_lappy_support.svg" alt="character-svg" style={{ maxWidth: '75%' }} />
                             <Typography component="h1" variant="h5">
-                                    Welcome! to <span className="text-pink-600"> Apna Expenses </span>
+                                Welcome! to <span className="text-pink-600"> Apna Expenses </span>
                             </Typography>
                             <form onSubmit={signUpHandler} className={classes.form} noValidate>
-                                    <TextField className={classes.formField} variant="filled" margin="normal" required fullWidth type="text" label="Name" autoComplete="name" autoFocus
-                                        value={name}
-                                        onChange={(event) => setName(event.target.value)}
-                                    />
-                                    <TextField className={classes.formField} variant="filled" margin="normal" required fullWidth type="email" label="Email Address" autoComplete="email"
+                                <TextField className={classes.formField} variant="filled" margin="normal" required fullWidth type="text" label="Name" autoComplete="name" autoFocus
+                                    value={name}
+                                    onChange={(event) => setName(event.target.value)}
+                                />
+                                <TextField className={classes.formField} variant="filled" margin="normal" required fullWidth type="email" label="Email Address" autoComplete="email"
                                     value={email}
                                     onChange={(event) => setEmail(event.target.value)}
                                 />
@@ -95,12 +96,12 @@ const SignUp = () => {
                                 <Grid container alignItems="center" justify="center">
                                     <Grid item>
                                         Have an account?
-                                            <Link to={SIGNIN}>
+                                        <Link to={SIGNIN}>
                                             <spna style={{ marginLeft: '10px', color: 'white' }}>Sign In</spna>
                                         </Link>
                                     </Grid>
                                 </Grid>
-                                </form>
+                            </form>
                         </div>
                     </Container>
                 )

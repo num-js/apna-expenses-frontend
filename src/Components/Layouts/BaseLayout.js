@@ -5,6 +5,7 @@ import { getCookie } from '../../helpers/CookiesHelper';
 import Header from '../Header/Header';
 import Footer from '../Footer/Footer';
 import { useDispatch } from 'react-redux';
+import { SIGNIN } from '../../routes/routesConstants';
 
 const BaseLayout = ({ children }) => {
     const history = useHistory();
@@ -15,12 +16,11 @@ const BaseLayout = ({ children }) => {
      * Check User's Authorization & Redirection
      */
     useEffect(() => {
-        // if (getCookie('db_access_token')) {
+        if (getCookie('apna-expenses-token')) {
             setComponentLoader(false);
-            
-        // } else {
-        //     history.push('/signup');
-        // }
+        } else {
+            history.push(SIGNIN);
+        }
     }, []);
 
     return (
