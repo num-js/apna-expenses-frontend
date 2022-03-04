@@ -32,7 +32,7 @@ const ExpensesPage = () => {
                 </div>
 
                 <section class="text-gray-600 body-font" style={{ minHeight: '90vh' }}>
-                    <div class="container px-5 py-24 mx-auto">
+                    <div class="container px-5 py-4 mx-auto">
                         <div class="flex flex-wrap -m-2">
                             {allExpensesData && allExpensesData.map((expenses) => (
                                 <div key={expenses._id} class="p-2 lg:w-1/3 md:w-1/2 w-full">
