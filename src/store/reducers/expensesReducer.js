@@ -4,6 +4,10 @@ import FetchAPIData from '../../helpers/FetchAPIData';
 const initialState = {
     allExpensesData: null,
     allExpensesDataLoader: false,
+    totalAmount: 0,
+    allMoneyData: null,
+    allMoneyDataLoader: false,
+    totalAmount: null,
 }
 
 export const fetchAllExpensesData = createAsyncThunk(
@@ -11,7 +15,7 @@ export const fetchAllExpensesData = createAsyncThunk(
     async () => {
         const response = await FetchAPIData('get', '/get-expenses');
         console.log('response: ', response);
-        return response.data.data;
+        return response.data;
     }
 )
 
@@ -28,12 +32,37 @@ export const deleteExpense = createAsyncThunk(
     }
 )
 
+export const deleteMoney = createAsyncThunk(
+    'deleteExpense',
+    async (transactionId) => {
+        try {
+            const response = await FetchAPIData('delete', `/delete-transaction/${transactionId}`);
+            console.log('response: ', response);
+            return transactionId;
+        } catch (error) {
+            console.log('Error: ', error);
+        }
+    }
+)
+
+export const fetchAllMoneyData = createAsyncThunk(
+    'fetchAllMoneyData',
+    async () => {
+        const response = await FetchAPIData('get', '/get-transactions');
+        console.log('response: ', response);
+        return response.data.data;
+    }
+)
+
 const expensesSlice = createSlice({
     name: "expensesSlice",
     initialState,
     reducers: {
         addExpense: (state, { payload }) => {
             state.allExpensesData = [payload, ...state.allExpensesData]
+        },
+        addTransaction: (state, { payload }) => {
+            state.allMoneyData = [payload, ...state.allMoneyData]
         },
     },
     extraReducers: {
@@ -42,22 +71,34 @@ const expensesSlice = createSlice({
         },
         [fetchAllExpensesData.fulfilled]: (state, { payload }) => {
             state.allExpensesDataLoader = false;
-            state.allExpensesData = payload;
+            state.allExpensesData = payload.data;
+            state.allMoneyData = payload.accountData;
+            state.totalAmount = payload.totalAmount;
         },
         [fetchAllExpensesData.rejected]: (state) => {
             state.allExpensesDataLoader = false;
-            console.log('Error Occur in Fetching Data');
-        },
-        [fetchAllExpensesData.fulfilled]: (state, { payload }) => {
-            state.allExpensesDataLoader = false;
-            state.allExpensesData = payload;
+            console.log('Error Occur in Fetching Expense Data');
         },
         [deleteExpense.fulfilled]: (state, { payload }) => {
             state.allExpensesData = state.allExpensesData.filter(expense => expense._id !== payload);
+        },
+        [fetchAllMoneyData.pending]: (state) => {
+            state.allMoneyDataLoader = true;
+        },
+        [fetchAllMoneyData.fulfilled]: (state, { payload }) => {
+            state.allMoneyDataLoader = false;
+            state.allMoneyData = payload;
+        },
+        [fetchAllMoneyData.rejected]: (state) => {
+            state.allMoneyDataLoader = false;
+            console.log('Error Occur in Fetching Account Data');
+        },
+        [deleteExpense.fulfilled]: (state, { payload }) => {
+            state.allMoneyData = state.allMoneyData.filter(transaction => transaction._id !== payload);
         },
     }
 });
 
 
-export const { addExpense } = expensesSlice.actions;
+export const { addExpense, addTransaction } = expensesSlice.actions;
 export default expensesSlice.reducer;

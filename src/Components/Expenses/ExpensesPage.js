@@ -11,7 +11,7 @@ import FloatingActionButton from '../Shared/FloatingActionButton';
 
 
 const ExpensesPage = () => {
-    const { allExpensesData } = useSelector(state => state.expensesReducer);
+    const { allExpensesData, totalAmount } = useSelector(state => state.expensesReducer);
 
     const classes = useStyles();
     const dispatch = useDispatch();
@@ -29,6 +29,19 @@ const ExpensesPage = () => {
                     <FloatingActionButton>
                         <AddIcon />
                     </FloatingActionButton>
+                </div>
+
+                <div class="p-2 lg:w-1/3 md:w-1/2 w-full">
+                    <div class="h-full flex items-center justify-between border-gray-200 border p-4 rounded-lg">
+                        <div class="">
+                            <p class="text-gray-500"> Total Amount </p>
+                            <h2 class="text-white title-font font-medium"> {totalAmount} </h2>
+                        </div>
+                        <div class="">
+                            <div> &nbsp;</div>
+                            <button class="inline-flex text-white bg-indigo-500 border-0  px-2 focus:outline-none hover:bg-indigo-600 rounded">View Details</button>
+                        </div>
+                    </div>
                 </div>
 
                 <section class="text-gray-600 body-font" style={{ minHeight: '90vh' }}>
