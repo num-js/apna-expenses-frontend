@@ -7,6 +7,7 @@ const initialState = {
     totalAmount: 0,
     allMoneyData: null,
     allMoneyDataLoader: false,
+    totalAmount: null,
 }
 
 export const fetchAllExpensesData = createAsyncThunk(
@@ -14,7 +15,7 @@ export const fetchAllExpensesData = createAsyncThunk(
     async () => {
         const response = await FetchAPIData('get', '/get-expenses');
         console.log('response: ', response);
-        return response.data.data;
+        return response.data;
     }
 )
 
@@ -70,7 +71,9 @@ const expensesSlice = createSlice({
         },
         [fetchAllExpensesData.fulfilled]: (state, { payload }) => {
             state.allExpensesDataLoader = false;
-            state.allExpensesData = payload;
+            state.allExpensesData = payload.data;
+            state.allMoneyData = payload.accountData;
+            state.totalAmount = payload.totalAmount;
         },
         [fetchAllExpensesData.rejected]: (state) => {
             state.allExpensesDataLoader = false;
