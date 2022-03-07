@@ -5,7 +5,8 @@ import SignIn from '../Components/AuthComponents/SignIn/SignIn';
 import SignUp from '../Components/AuthComponents/SignUp/SignUp';
 import ErrorNotFound from '../Components/ErrorNotFound/ErrorNotFound';
 import ExpensesPage from '../Components/Expenses/ExpensesPage';
-import { ACCOUNT, INDEX, SIGNIN, SIGNUP } from './routesConstants';
+import KhataPage from '../Components/Khata/KhataPage';
+import { ACCOUNT, INDEX, KHATA, SIGNIN, SIGNUP } from './routesConstants';
 
 const Routers = () => {
     return (
@@ -25,6 +26,10 @@ const Routers = () => {
 
                 <Route exact path={ACCOUNT} >
                     <AccountPage />
+                </Route>
+
+                <Route exact path={KHATA} >
+                    <KhataPage />
                 </Route>
 
                 <Route>

@@ -8,7 +8,7 @@ import RestoreIcon from '@material-ui/icons/Restore';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import LocationOnIcon from '@material-ui/icons/LocationOn';
 import { NavLink } from 'react-router-dom';
-import { ACCOUNT, INDEX } from '../../routes/routesConstants';
+import { ACCOUNT, INDEX, KHATA } from '../../routes/routesConstants';
 
 const useStyles = makeStyles({
     root: {
@@ -53,7 +53,7 @@ const Footer = () => {
 
                 <BottomNavigationAction
                     icon={
-                        <NavLink to="/">
+                        <NavLink to={KHATA}>
                             <img src="./images/svgs/footer-nav/chat.svg" alt="chat" />
                         </NavLink>
                     }
