@@ -8,7 +8,7 @@ import { Drawer } from '@material-ui/core';
 import AddMoneyForm from './AddMoneyForm';
 
 const KhataPage = () => {
-    const { allKhataTransactions, allKhatas, selectedKhataId } = useSelector(state => state.khataReducer);
+    const { allKhataTransactions, allKhatas, selectedKhata } = useSelector(state => state.khataReducer);
     const dispatch = useDispatch();
     const [toggleBottomSheet, setToggleBottomSheet] = useState(false);
 
@@ -17,8 +17,8 @@ const KhataPage = () => {
     }, []);
 
     useEffect(() => {
-        selectedKhataId && dispatch(fetchAllKhataTransactions(selectedKhataId));
-    }, [selectedKhataId]);
+        selectedKhata && dispatch(fetchAllKhataTransactions(selectedKhata._id));
+    }, [selectedKhata]);
 
     return (
         <>

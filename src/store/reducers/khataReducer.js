@@ -4,7 +4,7 @@ import FetchAPIData from '../../helpers/FetchAPIData';
 const initialState = {
     allKhatas: null,
     allKhatasLoader: false,
-    selectedKhataId: null,
+    selectedKhata: null,
 
     allKhataTransactions: null,
     allKhataTransactionsLoader: false,
@@ -61,7 +61,7 @@ const expensesSlice = createSlice({
     initialState,
     reducers: {
         addKhata: (state, { payload }) => {
-            state.allExpensesData = [payload, ...state.allKhatas]
+            state.allKhatas = [...state.allKhatas, payload]
         },
         addKhataTransaction: (state, { payload }) => {
             state.allKhataTransactions = [...state.allKhataTransactions, payload]
@@ -89,7 +89,7 @@ const expensesSlice = createSlice({
         [fetchAllKhatas.fulfilled]: (state, { payload }) => {
             state.allKhatasLoader = false;
             state.allKhatas = payload;
-            state.selectedKhataId = payload[0]._id
+            state.selectedKhata = payload[0]
         },
         [fetchAllKhatas.rejected]: (state) => {
             state.allKhatasLoader = false;
@@ -102,5 +102,5 @@ const expensesSlice = createSlice({
 });
 
 
-export const { addKhataTransaction } = expensesSlice.actions;
+export const { addKhataTransaction, addKhata } = expensesSlice.actions;
 export default expensesSlice.reducer;

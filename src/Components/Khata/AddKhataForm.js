@@ -1,66 +1,46 @@
 import React, { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { toast } from 'react-toastify';
 import FetchAPIData from '../../helpers/FetchAPIData';
-import { addKhataTransaction } from '../../store/reducers/khataReducer';
+import { addKhata } from '../../store/reducers/khataReducer';
 
-const AddMoneyForm = ({ setToggleBottomSheet }) => {
-    const { selectedKhata } = useSelector(state => state.khataReducer);
+const AddKhataForm = ({ setToggleBottomSheet }) => {
     const dispatch = useDispatch();
 
     const [title, setTitle] = useState("");
-    const [amount, setAmount] = useState("");
     const [message, setMessage] = useState("");
     const [date, setDate] = useState("");
-    const [transactionType, setTransactionType] = useState("receive");
 
 
-    const addKhataTransactionHandler = async (event) => {
+    const addKhataHandler = async (event) => {
         event.preventDefault();
-        if (!title || !amount) {
+        if (!title) {
             toast.error('Please Enter Expense & Amount');
             return;
         }
 
-        let newKhataTransaction = {
+        let newKhataData = {
             title,
-            amount,
             message,
-            transactionType,
-            khata: selectedKhata._id
         }
 
-        date && newKhataTransaction.push(date);
+        date && newKhataData.push(date);
 
         try {
-            const response = await FetchAPIData('post', '/add-khata-transaction', newKhataTransaction);
+            const response = await FetchAPIData('post', '/add-khata', newKhataData);
             console.log('response: ', response);
             setToggleBottomSheet(false);
-            dispatch(addKhataTransaction(response.data.data));
+            dispatch(addKhata(response.data.data));
         } catch (error) {
-            console.log('Error in Adding Expense: ', error);
+            console.log('Error in Adding Khata: ', error);
         }
     }
 
     return (
         <div class="flex">
             <div class="lg:w-1/3 md:w-1/2 bg-white rounded-lg p-4 flex flex-col md:ml-auto w-full z-10 shadow-md">
-                <form onSubmit={addKhataTransactionHandler}>
-                    <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Add Transaction</h2>
-
-
-                    <div class="flex flex-col text-center w-full">
-                        <div class="flex mx-auto border-2 border-indigo-500 rounded overflow-hidden">
-                            <div class={`py-1 px-4 focus:outline-none cursor-pointer ${transactionType === "receive" ? 'bg-indigo-500 text-white' : ''}`}
-                                onClick={() => setTransactionType('receive')}
-                            > Receive</div>
-                            <div class={`py-1 px-4 focus:outline-none cursor-pointer ${transactionType === "send" ? 'bg-indigo-500 text-white' : ''}`}
-                                onClick={() => setTransactionType('send')}
-                            > Send </div>
-                        </div>
-                    </div>
-
-
+                <form onSubmit={addKhataHandler}>
+                    <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Add Khata</h2>
 
                     <div class="mb-4">
                         <label for="title" class="leading-7 text-sm text-gray-600">Title</label>
@@ -70,14 +50,7 @@ const AddMoneyForm = ({ setToggleBottomSheet }) => {
                             placeholder="Mobile"
                         />
                     </div>
-                    <div class="mb-4">
-                        <label for="amount" class="leading-7 text-sm text-gray-600">Amount</label>
-                        <input type="number" id="amount" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
-                            value={amount}
-                            onChange={(event) => setAmount(event.target.value)}
-                            placeholder="8000"
-                        />
-                    </div>
+
                     <div class="mb-4">
                         <label for="message" class="leading-7 text-sm text-gray-600">Message</label>
                         <textarea id="message" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 h-20 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
@@ -95,7 +68,7 @@ const AddMoneyForm = ({ setToggleBottomSheet }) => {
                         />
                     </div>
                     <button class="w-full text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg" type="submit">
-                        Add Money
+                        Add Khata
                     </button>
                     {/* loader ->
                      <svg role="status" class="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -109,4 +82,4 @@ const AddMoneyForm = ({ setToggleBottomSheet }) => {
     );
 }
 
-export default AddMoneyForm;
+export default AddKhataForm;
