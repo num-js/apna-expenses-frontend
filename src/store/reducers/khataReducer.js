@@ -3,19 +3,19 @@ import FetchAPIData from '../../helpers/FetchAPIData';
 
 const initialState = {
     allKhatas: null,
+    allKhatasLoader: false,
+    selectedKhataId: null,
+
     allKhataTransactions: null,
     allKhataTransactionsLoader: false,
 
     totalAmount: 0,
-    allMoneyData: null,
-    allMoneyDataLoader: false,
-    totalAmount: null,
 }
 
 export const fetchAllKhataTransactions = createAsyncThunk(
     'fetchAllKhataTransactions',
-    async () => {
-        const response = await FetchAPIData('get', '/get-khata-transactions/62257c949976c31ea880d032');
+    async (selectedKhataId) => {
+        const response = await FetchAPIData('get', `/get-khata-transactions/${selectedKhataId}`);
         console.log('response: ', response);
         return response.data;
     }
@@ -47,10 +47,10 @@ export const deleteMoney = createAsyncThunk(
     }
 )
 
-export const fetchAllMoneyData = createAsyncThunk(
-    'fetchAllMoneyData',
+export const fetchAllKhatas = createAsyncThunk(
+    'fetchAllKhatas',
     async () => {
-        const response = await FetchAPIData('get', '/get-transactions');
+        const response = await FetchAPIData('get', '/get-all-khatas');
         console.log('response: ', response);
         return response.data.data;
     }
@@ -60,11 +60,11 @@ const expensesSlice = createSlice({
     name: "expensesSlice",
     initialState,
     reducers: {
-        addAllKhatas: (state, { payload }) => {
-            state.allExpensesData = [payload, ...state.allExpensesData]
+        addKhata: (state, { payload }) => {
+            state.allExpensesData = [payload, ...state.allKhatas]
         },
         addKhataTransaction: (state, { payload }) => {
-            state.allKhataTransactions = [payload, ...state.allKhataTransactions]
+            state.allKhataTransactions = [...state.allKhataTransactions, payload]
         },
     },
     extraReducers: {
@@ -83,20 +83,21 @@ const expensesSlice = createSlice({
         [deleteExpense.fulfilled]: (state, { payload }) => {
             state.allExpensesData = state.allExpensesData.filter(expense => expense._id !== payload);
         },
-        [fetchAllMoneyData.pending]: (state) => {
-            state.allMoneyDataLoader = true;
+        [fetchAllKhatas.pending]: (state) => {
+            state.allKhatasLoader = true;
         },
-        [fetchAllMoneyData.fulfilled]: (state, { payload }) => {
-            state.allMoneyDataLoader = false;
-            state.allMoneyData = payload;
+        [fetchAllKhatas.fulfilled]: (state, { payload }) => {
+            state.allKhatasLoader = false;
+            state.allKhatas = payload;
+            state.selectedKhataId = payload[0]._id
         },
-        [fetchAllMoneyData.rejected]: (state) => {
-            state.allMoneyDataLoader = false;
+        [fetchAllKhatas.rejected]: (state) => {
+            state.allKhatasLoader = false;
             console.log('Error Occur in Fetching Account Data');
         },
-        [deleteExpense.fulfilled]: (state, { payload }) => {
-            state.allMoneyData = state.allMoneyData.filter(transaction => transaction._id !== payload);
-        },
+        // [deleteExpense.fulfilled]: (state, { payload }) => {
+        //     state.allMoneyData = state.allMoneyData.filter(transaction => transaction._id !== payload);
+        // },
     }
 });
 

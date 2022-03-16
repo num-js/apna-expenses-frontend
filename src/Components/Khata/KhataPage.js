@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchAllKhataTransactions } from '../../store/reducers/khataReducer';
+import { fetchAllKhataTransactions, fetchAllKhatas } from '../../store/reducers/khataReducer';
 import BaseLayout from '../Layouts/BaseLayout';
 import AddIcon from "@mui/icons-material/Add";
 import FloatingActionButton from '../Shared/FloatingActionButton';
@@ -8,23 +8,27 @@ import { Drawer } from '@material-ui/core';
 import AddMoneyForm from './AddMoneyForm';
 
 const KhataPage = () => {
-    const { allKhataTransactions } = useSelector(state => state.khataReducer);
+    const { allKhataTransactions, allKhatas, selectedKhataId } = useSelector(state => state.khataReducer);
     const dispatch = useDispatch();
     const [toggleBottomSheet, setToggleBottomSheet] = useState(false);
 
     useEffect(() => {
-        !allKhataTransactions && dispatch(fetchAllKhataTransactions());
+        !allKhatas && dispatch(fetchAllKhatas());
     }, []);
+
+    useEffect(() => {
+        selectedKhataId && dispatch(fetchAllKhataTransactions(selectedKhataId));
+    }, [selectedKhataId]);
 
     return (
         <>
             <BaseLayout>
                 <div class="page-full-height">
-                    <div onClick={() => setToggleBottomSheet(true)}>
+                    {/* <div onClick={() => setToggleBottomSheet(true)}>
                         <FloatingActionButton positions={{ bottom: 100, left: 30 }} color='secondary'>
                             <AddIcon />
                         </FloatingActionButton>
-                    </div>
+                    </div> */}
                     <div onClick={() => setToggleBottomSheet(true)}>
                         <FloatingActionButton>
                             <AddIcon />

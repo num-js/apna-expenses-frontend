@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import FetchAPIData from '../../helpers/FetchAPIData';
 import { addKhataTransaction } from '../../store/reducers/khataReducer';
 
 const AddMoneyForm = ({ setToggleBottomSheet }) => {
+    const { selectedKhataId } = useSelector(state => state.khataReducer);
     const dispatch = useDispatch();
+
     const [title, setTitle] = useState("");
     const [amount, setAmount] = useState("");
     const [message, setMessage] = useState("");
@@ -25,7 +27,7 @@ const AddMoneyForm = ({ setToggleBottomSheet }) => {
             amount,
             message,
             transactionType,
-            khata: "62257c949976c31ea880d032"
+            khata: selectedKhataId
         }
 
         date && newKhataTransaction.push(date);
