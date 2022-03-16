@@ -8,6 +8,7 @@ import useStyles from './navStyles';
 import FetchAPIData from '../../../helpers/FetchAPIData';
 import { toast } from 'react-toastify';
 import { Avatar } from '@material-ui/core';
+import Dropdown from '../../Shared/Dropdown';
 
 const NavBar = () => {
     const classes = useStyles();
@@ -35,8 +36,11 @@ const NavBar = () => {
                     <Avatar alt="Numan Ahmed" src="/static/images/avatar/1.jpg" />
                     <Typography variant="h6" className={classes.title}></Typography>
                     <Typography variant="h6" className={classes.title}>
-                        
+
                     </Typography>
+
+                    <Dropdown />
+
                     <OptionButton />
                 </Toolbar>
             </AppBar>
