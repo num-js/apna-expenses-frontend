@@ -1,9 +1,11 @@
 import React, { useState } from 'react'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { Drawer } from '@material-ui/core';
 import AddKhataForm from '../Khata/AddKhataForm';
+import { switchSelectedKhata } from '../../store/reducers/khataReducer';
 
 function Dropdown() {
+    const dispatch = useDispatch();
 
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -25,7 +27,7 @@ function Dropdown() {
                     </div>
                     {
                         allKhatas?.map(khata => (
-                            <li class="">
+                            <li onClick={() => dispatch(switchSelectedKhata(khata))}>
                                 <a class="bg-gray-200 hover:bg-gray-500 hover:text-gray-100 py-2 px-4 block whitespace-no-wrap" href="#">
                                     {khata.title}
                                 </a>

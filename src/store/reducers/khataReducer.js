@@ -66,6 +66,9 @@ const expensesSlice = createSlice({
         addKhataTransaction: (state, { payload }) => {
             state.allKhataTransactions = [...state.allKhataTransactions, payload]
         },
+        switchSelectedKhata: (state, { payload }) => {
+            state.selectedKhata = payload
+        },
     },
     extraReducers: {
         [fetchAllKhataTransactions.pending]: (state) => {
@@ -102,5 +105,5 @@ const expensesSlice = createSlice({
 });
 
 
-export const { addKhataTransaction, addKhata } = expensesSlice.actions;
+export const { addKhataTransaction, addKhata, switchSelectedKhata } = expensesSlice.actions;
 export default expensesSlice.reducer;
