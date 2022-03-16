@@ -6,6 +6,7 @@ import AddIcon from "@mui/icons-material/Add";
 import FloatingActionButton from '../Shared/FloatingActionButton';
 import { Drawer } from '@material-ui/core';
 import AddMoneyForm from './AddMoneyForm';
+import { getTotalOfAmountArray, getTotalOfReceiveAmountArray, getTotalOfSendAmountArray } from '../../helpers/getTotalOfAmountArray';
 
 const KhataPage = () => {
     const { allKhataTransactions, allKhatas, selectedKhata } = useSelector(state => state.khataReducer);
@@ -43,9 +44,11 @@ const KhataPage = () => {
                                         <div>
                                             <div class="relative flex items-center p-3 border-b border-gray-300">
                                                 <img class="object-cover w-10 h-10 rounded-full" src="../images/nlogo.jpg" alt="username" />
-                                                <span class="block ml-2 font-bold text-gray-600">Mama</span>
+                                                <span class="block ml-2 font-bold text-gray-600">{selectedKhata?.title}</span>
                                                 <span class="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3"></span>
-                                                <span class="block ml-auto font-bold text-gray-600"> ₹ 150000</span>
+                                                <span class="block ml-auto font-bold text-gray-600">
+                                                    {allKhataTransactions && getTotalOfAmountArray(allKhataTransactions)}
+                                                </span>
                                             </div>
                                         </div>
 
