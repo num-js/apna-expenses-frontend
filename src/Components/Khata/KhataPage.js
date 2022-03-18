@@ -7,6 +7,7 @@ import FloatingActionButton from '../Shared/FloatingActionButton';
 import { Drawer } from '@material-ui/core';
 import AddMoneyForm from './AddMoneyForm';
 import { getTotalOfAmountArray, getTotalOfReceiveAmountArray, getTotalOfSendAmountArray } from '../../helpers/getTotalOfAmountArray';
+import { getDate } from '../../helpers/DatesFormatter';
 
 const KhataPage = () => {
     const { allKhataTransactions, allKhatas, selectedKhata } = useSelector(state => state.khataReducer);
@@ -59,7 +60,7 @@ const KhataPage = () => {
                                                         <div class={`relative max-w-xl px-4 py-2 rounded shadow ${transaction.transactionType === "receive" ? 'text-white bg-blue-500' : 'text-gray-700 bg-gray-100'}`} style={{ minWidth: '60%' }}>
                                                             <span class="block"> {transaction.title} </span>
                                                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                <div className="text-gray-200"> {transaction.date} </div>
+                                                                <div className="text-gray-200"> {getDate(transaction.date)} </div>
                                                                 <div className="font-bold"> ₹ {transaction.amount} </div>
                                                             </div>
                                                         </div>
