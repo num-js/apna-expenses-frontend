@@ -47,8 +47,8 @@ const KhataPage = () => {
                                                 <img class="object-cover w-10 h-10 rounded-full" src="../images/nlogo.jpg" alt="username" />
                                                 <span class="block ml-2 font-bold text-gray-600">{selectedKhata?.title}</span>
                                                 <span class="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3"></span>
-                                                <span class="block ml-auto font-bold text-gray-600">
-                                                    {allKhataTransactions && getTotalOfAmountArray(allKhataTransactions)}
+                                                <span class="block ml-auto font-bold text-gray-200">
+                                                    ₹ {allKhataTransactions && getTotalOfAmountArray(allKhataTransactions)}
                                                 </span>
                                             </div>
                                         </div>
@@ -57,10 +57,10 @@ const KhataPage = () => {
                                             <ul class="space-y-2">
                                                 {allKhataTransactions && allKhataTransactions.map((transaction) => (
                                                     <li class={`flex ${transaction.transactionType === "receive" ? "justify-start" : "justify-end"}`}>
-                                                        <div class={`relative max-w-xl px-4 py-2 rounded shadow ${transaction.transactionType === "receive" ? 'text-white bg-blue-500' : 'text-gray-700 bg-gray-100'}`} style={{ minWidth: '60%' }}>
+                                                        <div class={`relative max-w-xl px-4 py-2 rounded shadow text-white ${transaction.transactionType === "receive" ? 'bg-pink-800' : 'bg-gray-500'}`} style={{ minWidth: '60%' }}>
                                                             <span class="block"> {transaction.title} </span>
                                                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                <div className="text-gray-200"> {getDate(transaction.date)} </div>
+                                                                <div className="text-sm text-gray-400"> {getDate(transaction.date)} </div>
                                                                 <div className="font-bold"> ₹ {transaction.amount} </div>
                                                             </div>
                                                         </div>
