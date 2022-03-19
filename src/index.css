@@ -82,3 +82,8 @@ code {
 .page-full-height {
   min-height: 85vh;
 }
+
+.disable-all {
+  pointer-events: none;
+  border: none;
+}

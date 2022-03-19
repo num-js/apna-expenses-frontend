@@ -13,6 +13,8 @@ const KhataPage = () => {
     const { allKhataTransactions, allKhatas, selectedKhata } = useSelector(state => state.khataReducer);
     const dispatch = useDispatch();
     const [toggleBottomSheet, setToggleBottomSheet] = useState(false);
+    const [selectedTransaction, setSelectedTransaction] = useState(null);
+
 
     useEffect(() => {
         !allKhatas && dispatch(fetchAllKhatas());
@@ -44,8 +46,8 @@ const KhataPage = () => {
                                     <div class="w-full">
                                         <div>
                                             <div class="relative flex items-center p-3 border-b border-gray-300">
-                                                <img class="object-cover w-10 h-10 rounded-full" src="../images/nlogo.jpg" alt="username" />
-                                                <span class="block ml-2 font-bold text-gray-600">{selectedKhata?.title}</span>
+                                                <img class="object-cover w-10 h-10 rounded-full cursor-pointer" src="../images/nlogo.jpg" alt="username" />
+                                                <span class="block ml-2 font-bold text-gray-600 cursor-pointer">{selectedKhata?.title}</span>
                                                 <span class="absolute w-3 h-3 bg-green-600 rounded-full left-10 top-3"></span>
                                                 <span class="block ml-auto font-bold text-gray-200">
                                                     ₹ {allKhataTransactions && getTotalOfAmountArray(allKhataTransactions)}
@@ -57,10 +59,12 @@ const KhataPage = () => {
                                             <ul class="space-y-2">
                                                 {allKhataTransactions && allKhataTransactions.map((transaction) => (
                                                     <li class={`flex ${transaction.transactionType === "receive" ? "justify-start" : "justify-end"}`}>
-                                                        <div class={`relative max-w-xl px-4 py-2 rounded shadow text-white ${transaction.transactionType === "receive" ? 'bg-pink-800' : 'bg-gray-500'}`} style={{ minWidth: '60%' }}>
+                                                        <div class={`relative max-w-xl px-4 py-2 rounded shadow text-white 	min-w-max cursor-pointer ${transaction.transactionType === "receive" ? 'bg-pink-800' : 'bg-gray-500'}`}
+                                                            onClick={() => setSelectedTransaction(transaction)}
+                                                        >
                                                             <span class="block"> {transaction.title} </span>
                                                             <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                                <div className="text-sm text-gray-400"> {getDate(transaction.date)} </div>
+                                                                <div className="mr-20 text-sm text-gray-400"> {getDate(transaction.date)} </div>
                                                                 <div className="font-bold"> ₹ {transaction.amount} </div>
                                                             </div>
                                                         </div>
@@ -82,6 +86,19 @@ const KhataPage = () => {
                     >
                         <AddMoneyForm setToggleBottomSheet={setToggleBottomSheet} />
                     </Drawer>
+
+                    <Drawer
+                        anchor={"bottom"}
+                        open={selectedTransaction}
+                        onClose={() => { setSelectedTransaction(null); }}
+                        style={{ background: 'transparent' }}
+                    >
+                        <AddMoneyForm setToggleBottomSheet={setToggleBottomSheet}
+                            selectedTransaction={selectedTransaction}
+                            setSelectedTransaction={setSelectedTransaction}
+                        />
+                    </Drawer>
+
                 </div>
             </BaseLayout>
         </>

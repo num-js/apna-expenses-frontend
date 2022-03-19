@@ -63,9 +63,20 @@ const expensesSlice = createSlice({
         addKhata: (state, { payload }) => {
             state.allKhatas = [...state.allKhatas, payload]
         },
+
         addKhataTransaction: (state, { payload }) => {
             state.allKhataTransactions = [...state.allKhataTransactions, payload]
         },
+
+        updateKhataTransaction: (state, { payload }) => {
+            state.allKhataTransactions = state.allKhataTransactions.map(transaction => {
+                if (transaction._id === payload._id) {
+                    transaction = payload;
+                }
+                return transaction;
+            });
+        },
+
         switchSelectedKhata: (state, { payload }) => {
             state.selectedKhata = payload
         },
@@ -105,5 +116,5 @@ const expensesSlice = createSlice({
 });
 
 
-export const { addKhataTransaction, addKhata, switchSelectedKhata } = expensesSlice.actions;
+export const { addKhataTransaction, updateKhataTransaction, addKhata, switchSelectedKhata } = expensesSlice.actions;
 export default expensesSlice.reducer;
