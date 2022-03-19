@@ -11,7 +11,7 @@ const AddMoneyForm = ({ setToggleBottomSheet, selectedTransaction, setSelectedTr
     const [title, setTitle] = useState(selectedTransaction?.title || "");
     const [amount, setAmount] = useState(selectedTransaction?.amount || "");
     const [message, setMessage] = useState(selectedTransaction?.message || "");
-    const [date, setDate] = useState(selectedTransaction?.date || "");
+    const [date, setDate] = useState(selectedTransaction?.date && new Date(selectedTransaction?.date)?.toISOString()?.split("T")[0] || "");
     const [transactionType, setTransactionType] = useState(selectedTransaction?.transactionType || "receive");
     const [enableEdit, setEnableEdit] = useState(false);
 
