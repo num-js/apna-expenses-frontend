@@ -2,23 +2,24 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import FetchAPIData from '../../helpers/FetchAPIData';
-import { addKhataTransaction } from '../../store/reducers/khataReducer';
+import { addKhataTransaction, updateKhataTransaction } from '../../store/reducers/khataReducer';
 
-const AddMoneyForm = ({ setToggleBottomSheet }) => {
+const AddMoneyForm = ({ setToggleBottomSheet, selectedTransaction, setSelectedTransaction }) => {
     const { selectedKhata } = useSelector(state => state.khataReducer);
     const dispatch = useDispatch();
 
-    const [title, setTitle] = useState("");
-    const [amount, setAmount] = useState("");
-    const [message, setMessage] = useState("");
-    const [date, setDate] = useState("");
-    const [transactionType, setTransactionType] = useState("receive");
+    const [title, setTitle] = useState(selectedTransaction?.title || "");
+    const [amount, setAmount] = useState(selectedTransaction?.amount || "");
+    const [message, setMessage] = useState(selectedTransaction?.message || "");
+    const [date, setDate] = useState(selectedTransaction?.date || "");
+    const [transactionType, setTransactionType] = useState(selectedTransaction?.transactionType || "receive");
+    const [enableEdit, setEnableEdit] = useState(false);
 
 
     const addKhataTransactionHandler = async (event) => {
         event.preventDefault();
         if (!title || !amount) {
-            toast.error('Please Enter Expense & Amount');
+            toast.error('Please Enter Title & Amount');
             return;
         }
 
@@ -27,10 +28,12 @@ const AddMoneyForm = ({ setToggleBottomSheet }) => {
             amount,
             message,
             transactionType,
-            khata: selectedKhata._id
+            khata: selectedKhata._id,
         }
 
-        date && newKhataTransaction.push(date);
+        if (date) {
+            newKhataTransaction.date = date;
+        }
 
         try {
             const response = await FetchAPIData('post', '/add-khata-transaction', newKhataTransaction);
@@ -42,29 +45,86 @@ const AddMoneyForm = ({ setToggleBottomSheet }) => {
         }
     }
 
+    const updateKhataTransactionHandler = async (event) => {
+        event.preventDefault();
+        if (!title || !amount) {
+            toast.error('Please Enter Title & Amount');
+            return;
+        }
+
+        let updatedKhataTransaction = {
+            title,
+            amount,
+            message,
+            transactionType,
+        }
+
+        if (date) {
+            updatedKhataTransaction.date = date;
+        }
+
+        try {
+            const response = await FetchAPIData('put', `/update-khata-transaction/${selectedTransaction._id}`, updatedKhataTransaction);
+            console.log('response: ', response);
+            dispatch(updateKhataTransaction(response.data.data));
+            setSelectedTransaction(null);
+        } catch (error) {
+            console.log('Error in Adding Expense: ', error);
+        }
+    }
+
     return (
         <div class="flex">
             <div class="lg:w-1/3 md:w-1/2 bg-white rounded-lg p-4 flex flex-col md:ml-auto w-full z-10 shadow-md">
-                <form onSubmit={addKhataTransactionHandler}>
-                    <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Add Transaction</h2>
-
+                <form onSubmit={selectedTransaction ? updateKhataTransactionHandler : addKhataTransactionHandler}>
+                    <div className="flex justify-between">
+                        <div>
+                            <h2 class="text-gray-900 text-lg mb-1 font-medium title-font">Add Transaction</h2>
+                        </div>
+                        <div>
+                            {
+                                selectedTransaction && (
+                                    enableEdit ? (
+                                        <span className="mr-6 cursor-pointer"
+                                            onClick={() => setEnableEdit(false)}
+                                        >Cancel</span>
+                                    ) : (
+                                        <span className="mr-6 cursor-pointer"
+                                            onClick={() => setEnableEdit(true)}
+                                        >Edit</span>
+                                    )
+                                )
+                            }
+                            <span className="relative cursor-pointer -top-3"
+                                onClick={() => { selectedTransaction ? setSelectedTransaction(null) : setToggleBottomSheet(false) }}
+                            >X</span>
+                        </div>
+                    </div>
 
                     <div class="flex flex-col text-center w-full">
-                        <div class="flex mx-auto border-2 border-indigo-500 rounded overflow-hidden">
-                            <div class={`py-1 px-4 focus:outline-none cursor-pointer ${transactionType === "receive" ? 'bg-indigo-500 text-white' : ''}`}
-                                onClick={() => setTransactionType('receive')}
-                            > Receive</div>
-                            <div class={`py-1 px-4 focus:outline-none cursor-pointer ${transactionType === "send" ? 'bg-indigo-500 text-white' : ''}`}
-                                onClick={() => setTransactionType('send')}
-                            > Send </div>
-                        </div>
+                        {
+                            selectedTransaction && !enableEdit ? (
+                                <div class="flex mx-auto border-2 border-indigo-500 rounded overflow-hidden">
+                                    <div class={`py-1 px-4 focus:outline-none cursor-pointer bg-indigo-500 text-white`}> {transactionType} </div>
+                                </div>
+                            ) : (
+                                    <div class="flex mx-auto border-2 border-indigo-500 rounded overflow-hidden">
+                                        <div class={`py-1 px-4 focus:outline-none cursor-pointer ${transactionType === "receive" ? 'bg-indigo-500 text-white' : ''}`}
+                                            onClick={() => setTransactionType('receive')}
+                                        > Receive</div>
+                                        <div class={`py-1 px-4 focus:outline-none cursor-pointer ${transactionType === "send" ? 'bg-indigo-500 text-white' : ''}`}
+                                            onClick={() => setTransactionType('send')}
+                                        > Send </div>
+                                    </div>
+                            )
+                        }
                     </div>
 
 
 
                     <div class="mb-4">
                         <label for="title" class="leading-7 text-sm text-gray-600">Title</label>
-                        <input type="text" id="title" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                        <input type="text" id="title" class={`w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${selectedTransaction && !enableEdit ? 'disable-all' : ''}`}
                             value={title}
                             onChange={(event) => setTitle(event.target.value)}
                             placeholder="Mobile"
@@ -72,7 +132,7 @@ const AddMoneyForm = ({ setToggleBottomSheet }) => {
                     </div>
                     <div class="mb-4">
                         <label for="amount" class="leading-7 text-sm text-gray-600">Amount</label>
-                        <input type="number" id="amount" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                        <input type="number" id="amount" class={`w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${selectedTransaction && !enableEdit ? 'disable-all' : ''}`}
                             value={amount}
                             onChange={(event) => setAmount(event.target.value)}
                             placeholder="8000"
@@ -80,7 +140,7 @@ const AddMoneyForm = ({ setToggleBottomSheet }) => {
                     </div>
                     <div class="mb-4">
                         <label for="message" class="leading-7 text-sm text-gray-600">Message</label>
-                        <textarea id="message" class="w-full bg-white rounded border border-gray-300 focus:border-red-500 focus:ring-2 focus:ring-red-200 h-20 text-base outline-none text-gray-700 py-1 px-3 resize-none leading-6 transition-colors duration-200 ease-in-out"
+                        <textarea id="message" class={`w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${selectedTransaction && !enableEdit ? 'disable-all' : ''}`}
                             value={message}
                             onChange={(event) => setMessage(event.target.value)}
                             placeholder="RealMe 7"
@@ -88,14 +148,14 @@ const AddMoneyForm = ({ setToggleBottomSheet }) => {
                     </div>
                     <div class="mb-4">
                         <label for="date" class="leading-7 text-sm text-gray-600">Date</label>
-                        <input type="date" id="date" class="w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+                        <input type="date" id="date" class={`w-full bg-white rounded border border-gray-300 focus:border-indigo-500 focus:ring-2 focus:ring-indigo-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out ${selectedTransaction && !enableEdit ? 'disable-all' : ''}`}
                             value={date}
                             onChange={(event) => setDate(event.target.value)}
                             placeholder="23/02/2022"
                         />
                     </div>
                     <button class="w-full text-white bg-red-500 border-0 py-2 px-6 focus:outline-none hover:bg-red-600 rounded text-lg" type="submit">
-                        Add Money
+                        {selectedTransaction ? 'Update' : 'Add'} Transaction
                     </button>
                     {/* loader ->
                      <svg role="status" class="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
