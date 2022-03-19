@@ -21,32 +21,6 @@ export const fetchAllKhataTransactions = createAsyncThunk(
     }
 )
 
-export const deleteExpense = createAsyncThunk(
-    'deleteExpense',
-    async (expenseId) => {
-        try {
-            const response = await FetchAPIData('delete', `/delete-expense/${expenseId}`);
-            console.log('response: ', response);
-            return expenseId;
-        } catch (error) {
-            console.log('Error: ', error);
-        }
-    }
-)
-
-export const deleteMoney = createAsyncThunk(
-    'deleteExpense',
-    async (transactionId) => {
-        try {
-            const response = await FetchAPIData('delete', `/delete-transaction/${transactionId}`);
-            console.log('response: ', response);
-            return transactionId;
-        } catch (error) {
-            console.log('Error: ', error);
-        }
-    }
-)
-
 export const fetchAllKhatas = createAsyncThunk(
     'fetchAllKhatas',
     async () => {
@@ -77,6 +51,10 @@ const expensesSlice = createSlice({
             });
         },
 
+        deleteKhataTransaction: (state, { payload }) => {
+            state.allKhataTransactions = state.allKhataTransactions.filter(transaction => transaction._id !== payload._id);
+        },
+
         switchSelectedKhata: (state, { payload }) => {
             state.selectedKhata = payload
         },
@@ -94,9 +72,6 @@ const expensesSlice = createSlice({
             state.allExpensesDataLoader = false;
             console.log('Error Occur in Fetching Expense Data');
         },
-        [deleteExpense.fulfilled]: (state, { payload }) => {
-            state.allExpensesData = state.allExpensesData.filter(expense => expense._id !== payload);
-        },
         [fetchAllKhatas.pending]: (state) => {
             state.allKhatasLoader = true;
         },
@@ -109,12 +84,9 @@ const expensesSlice = createSlice({
             state.allKhatasLoader = false;
             console.log('Error Occur in Fetching Account Data');
         },
-        // [deleteExpense.fulfilled]: (state, { payload }) => {
-        //     state.allMoneyData = state.allMoneyData.filter(transaction => transaction._id !== payload);
-        // },
     }
 });
 
 
-export const { addKhataTransaction, updateKhataTransaction, addKhata, switchSelectedKhata } = expensesSlice.actions;
+export const { addKhata, addKhataTransaction, updateKhataTransaction, deleteKhataTransaction, switchSelectedKhata } = expensesSlice.actions;
 export default expensesSlice.reducer;

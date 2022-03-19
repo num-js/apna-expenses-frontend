@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { toast } from 'react-toastify';
 import FetchAPIData from '../../helpers/FetchAPIData';
-import { addKhataTransaction, updateKhataTransaction } from '../../store/reducers/khataReducer';
+import { addKhataTransaction, deleteKhataTransaction, updateKhataTransaction } from '../../store/reducers/khataReducer';
 
 const AddMoneyForm = ({ setToggleBottomSheet, selectedTransaction, setSelectedTransaction }) => {
     const { selectedKhata } = useSelector(state => state.khataReducer);
@@ -69,7 +69,20 @@ const AddMoneyForm = ({ setToggleBottomSheet, selectedTransaction, setSelectedTr
             dispatch(updateKhataTransaction(response.data.data));
             setSelectedTransaction(null);
         } catch (error) {
-            console.log('Error in Adding Expense: ', error);
+            console.log('Error in Updating Transaction: ', error);
+        }
+    }
+
+    const deleteKhataTransactionHandler = async (event) => {
+        event.preventDefault();
+
+        try {
+            const response = await FetchAPIData('delete', `/delete-khata-transaction/${selectedTransaction._id}`);
+            console.log('response: ', response);
+            dispatch(deleteKhataTransaction(response.data.data));
+            setSelectedTransaction(null);
+        } catch (error) {
+            console.log('Error in Deleting Transaction: ', error);
         }
     }
 
@@ -95,6 +108,9 @@ const AddMoneyForm = ({ setToggleBottomSheet, selectedTransaction, setSelectedTr
                                     )
                                 )
                             }
+                            <span className="mr-6 cursor-pointer"
+                                onClick={deleteKhataTransactionHandler}
+                            >Delete</span>
                             <span className="relative cursor-pointer -top-3"
                                 onClick={() => { selectedTransaction ? setSelectedTransaction(null) : setToggleBottomSheet(false) }}
                             >X</span>
