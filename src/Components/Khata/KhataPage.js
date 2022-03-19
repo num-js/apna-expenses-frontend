@@ -55,11 +55,11 @@ const KhataPage = () => {
                                             </div>
                                         </div>
 
-                                        <div class="relative w-full p-6 overflow-y-auto h-[40rem]">
+                                        <div class="relative w-full px-3 py-6 overflow-y-auto h-[40rem]">
                                             <ul class="space-y-2">
                                                 {allKhataTransactions && allKhataTransactions.map((transaction) => (
                                                     <li class={`flex ${transaction.transactionType === "receive" ? "justify-start" : "justify-end"}`}>
-                                                        <div class={`relative max-w-xl px-4 py-2 rounded shadow text-white 	min-w-max cursor-pointer ${transaction.transactionType === "receive" ? 'bg-pink-800' : 'bg-gray-500'}`}
+                                                        <div class={`relative max-w-xl p-2 rounded shadow text-white 	min-w-max cursor-pointer ${transaction.transactionType === "receive" ? 'bg-pink-800' : 'bg-gray-500'}`}
                                                             onClick={() => setSelectedTransaction(transaction)}
                                                         >
                                                             <span class="block"> {transaction.title} </span>
